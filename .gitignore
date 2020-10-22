@@ -3,4 +3,4 @@
 .build
 dist
 build
-jupyter_tools*
+grokked_jupyter_tools*
