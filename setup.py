@@ -4,7 +4,7 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="jupyter-tools",
+    name="luca-jupyter-tools",
     version="0.0.1",
     author="Luca Mattiazzi",
     author_email="l.d.mattiazzi@gmail..com",
