@@ -3,4 +3,4 @@
 .build
 dist
 build
-jupyter-tools*
+jupyter_tools*
