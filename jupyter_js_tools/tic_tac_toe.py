@@ -18,5 +18,5 @@ js = open(f"{DIR_PATH}/tic_tac_toe/index.js", "r").read()
 def play_game(handler=player_fn):
     global player_fn
     player_fn = handler
-    display(HTML(html), update=True)
-    display(Javascript(js), update=True)
+    display(HTML(html))
+    display(Javascript(js))
