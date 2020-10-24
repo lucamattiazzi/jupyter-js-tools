@@ -3,6 +3,6 @@
 .build
 dist
 build
-grokked_jupyter_tools*
+jupyter_js_tools.egg-info/
 .ipynb_checkpoints
 __pycache__
