@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="jupyter_js_tools",
-    version="0.1.0",
+    version="0.1.1",
     author="Luca Mattiazzi",
     author_email="l.d.mattiazzi@gmail.com",
     description="A small example package",
