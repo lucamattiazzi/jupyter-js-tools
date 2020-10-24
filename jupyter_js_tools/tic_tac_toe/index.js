@@ -1,3 +1,5 @@
+const { abs, sqrt, floor, sign } = Math
+
 class Match {
   constructor(identifier) {
     this.grid = Array(9).fill(0)
@@ -15,7 +17,7 @@ class Match {
   }
 
   get side() {
-    return Math.sqrt(this.grid.length)
+    return sqrt(this.grid.length)
   }
 
   reset = () => {
@@ -43,36 +45,68 @@ class Match {
         this.gridDom[jdx].innerText = 'O'
         return new Promise((resolve) => setTimeout(resolve, 100))
       })
-      .then(() => {
-        this.checkWin()
-      })
+      .then(this.checkWin)
+      .catch((err) => console.log(err))
   }
 
-  checkGroup = (group) => {
+  checkForWinner = (group) => {
     const sum = group.reduce((a, v) => a + v, 0)
-    return Math.floor(Math.abs(sum) / group.length) * Math.sign(sum)
+    const winner = floor(abs(sum) / group.length) * sign(sum)
+    if (winner === 1) return 'X'
+    if (winner === -1) return '0'
+    return null
+  }
+
+  closeGame = (winner) => {
+    alert(`${winner} is the winner!`)
+    this.restartGame()
+    return true
   }
 
   checkWin = () => {
     // check rows
     for (let idx = 0; idx < this.side; idx++) {
       const row = this.grid.slice(idx * this.side, idx * this.side + this.side)
-      const winner = this.checkGroup(row)
-      if (Math.abs(winner) === 0) continue
-      alert(`${winner === 1 ? 'X' : 'O'} is the winner!`)
-      this.restartGame()
-      return true
+      const winner = this.checkForWinner(row)
+      if (winner) return this.closeGame(winner)
     }
-    return false
+    // check columns
+    for (let idx = 0; idx < this.side; idx++) {
+      const column = this.grid.filter((_, jdx) => jdx % this.side === idx)
+      const winner = this.checkForWinner(column)
+      if (winner) return this.closeGame(winner)
+    }
+    // check diagonals
+    {
+      const firstDiagonal = Array(this.side)
+        .fill(0)
+        .map((_, idx) => {
+          const gridIdx = idx * this.side + idx
+          return this.grid[gridIdx]
+        })
+      const winner = this.checkForWinner(firstDiagonal)
+      if (winner) return this.closeGame(winner)
+    }
+    {
+      const secondDiagonal = Array(this.side)
+        .fill(0)
+        .map((_, idx) => {
+          const gridIdx = (idx + 1) * (this.side - 1)
+          return this.grid[gridIdx]
+        })
+      const winner = this.checkForWinner(secondDiagonal)
+      if (winner) return this.closeGame(winner)
+    }
   }
 }
 
 function executePython(python) {
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
     const cb = {
       iopub: {
         output: (data) => {
-          resolve(data.content.text.trim())
+          if (data.content.text) return resolve(data.content.text.trim())
+          reject(data)
         },
       },
     }
